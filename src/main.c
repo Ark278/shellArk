@@ -7,17 +7,17 @@ int main(int argc, char *argv[]) {
   // Flush after every printf
   // TODO: Uncomment the code below to pass the first stage
   char buffer[100] = {0};
-  bool flag = true;
-  while(flag) {
+  while(strcmp(buffer, "exit")) {
     printf("$ ");
     fflush(stdout);
-    scanf ("%99s", buffer); 
-    if(strcmp(buffer, "exit") == 0) {
-      flag = false;
+    scanf ("%99s", buffer);
+    if(strcmp(buffer, "echo") == 0) {
+      char echo_buffer[100] = {0};
+      scanf("%99s", echo_buffer);
+      printf("%s\n", echo_buffer);
+      continue;
     }
-    else{
-      printf("%s: command not found\n", buffer);
-    }
+    printf("%s: command not found\n", buffer);
   }
   return 0;
 }
