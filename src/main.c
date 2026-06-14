@@ -13,8 +13,8 @@ int main(int argc, char *argv[]) {
     scanf ("%99s", buffer);
     if(strcmp(buffer, "echo") == 0) {
       char echo_buffer[100] = {0};
-      scanf("%99s", echo_buffer);
-      printf("%s\n", echo_buffer);
+      fgets(echo_buffer, 100, stdin);
+      printf("%s", echo_buffer);
       continue;
     }
     printf("%s: command not found\n", buffer);
