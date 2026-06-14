@@ -7,6 +7,6 @@ int main(int argc, char *argv[]) {
   char buffer[100] = {0};
   printf("$ ");
   scanf ("%99s", buffer); 
-  printf("{%s}: command not found", buffer);
+  printf("%s: command not found", buffer);
   return 0;
 }
