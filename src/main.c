@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
   // Flush after every printf
@@ -11,7 +12,12 @@ int main(int argc, char *argv[]) {
     printf("$ ");
     fflush(stdout);
     scanf ("%99s", buffer); 
-    printf("%s: command not found\n", buffer);
+    if(strcmp(buffer, "exit") == 0) {
+      flag = false;
+    }
+    else{
+      printf("%s: command not found\n", buffer);
+    }
   }
   return 0;
 }
