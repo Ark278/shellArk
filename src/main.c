@@ -7,7 +7,7 @@
 static const char *builtin_commands[] = {
   "echo",
   "exit",
-  "help"
+  "type"
 };
 
 static int is_builtin_command(const char *command) {
