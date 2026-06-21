@@ -7,16 +7,23 @@ int main(int argc, char *argv[]) {
   // Flush after every printf
   // TODO: Uncomment the code below to pass the first stage
   setbuf(stdout, NULL);
-  char buffer[100] = {0};
+  char buffer[100];
   while(1) {
     printf("$ ");
     fflush(stdout);
-    if(strcmp(buffer, "exit")    == 0) printf("%s: command not found\n", buffer);
     fgets(buffer, 100, stdin);
-    buffer[strlen(buffer) - 1] = '\0';
-    if(strncmp(buffer, "echo ", 5) == 0) {
+    size_t len = strlen(buffer);
+    if(len > 0 && buffer[len - 1] == '\n'){
+      buffer[len-1] = '\0';
+    }
+    if(strcmp(buffer, "exit") == 0) {
+      break;
+    }
+    else if(strncmp(buffer, "echo ", 5) == 0) {
       printf("%s\n", buffer + 5);
-      continue;
+    }
+    else {
+      printf("%s: command not found\n", buffer);
     }
   }
   return 0;
