@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <unistd.h>
 
 #define BUILTIN 3
 static const char *builtin_commands[] = {
@@ -9,6 +10,31 @@ static const char *builtin_commands[] = {
   "exit",
   "type"
 };
+
+char* find_executable(const char *cmd){
+  char *path_env = getenv("PATH");
+  if(path_env == NULL) {
+    return NULL;
+  }
+  char *path_env_copy = strdup(path_env);
+  if(path_env_copy == NULL) {
+    return NULL;
+  }
+  char *dir = strtok(path_env_copy, ":");
+  while(dir !=NULL){
+    char full_path[1024];
+    snprintf(full_path, sizeof(full_path), "%s/%s", dir, cmd);
+    if(access(full_path, X_OK) == 0) {
+      char *result = strdup(full_path);
+      free(path_env_copy);
+      return result;
+    }
+    dir = strtok(NULL, ":");
+  }
+  free(path_env_copy);
+  return NULL;
+}
+
 
 static int is_builtin_command(const char *command) {
   for (int i = 0; i < BUILTIN; i++) {
@@ -38,6 +64,12 @@ int main(int argc, char *argv[]) {
     if(strncmp(buffer, "type ", 5) == 0) {
       if(is_builtin_command(buffer + 5)) {
         printf("%s is a shell builtin\n", buffer + 5);
+        continue;
+      }
+      char *path = find_executable(buffer + 5);
+      if(path) {
+        printf("%s is %s\n", buffer + 5, path);
+        free(path);
       }
       else {
         printf("%s: not found\n", buffer + 5);
