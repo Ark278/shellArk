@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
     else if(strncmp(buffer, "cd ", 3) == 0) {
       char *dir = buffer + 3;
       if(chdir(dir) != 0) {
-        perror("cd: %s: No such file or directory", dir);
+        printf("cd: %s: No such file or directory", dir);
       }
     }
     else {
