@@ -115,9 +115,9 @@ int main(int argc, char *argv[]) {
         }
         free(path);
       }
-      else{
-        printf("%s: command not found\n", buffer);
-      }
+      // else{
+      //   printf("%s: command not found\n", buffer);
+      // }
     }
   }
   return 0;
