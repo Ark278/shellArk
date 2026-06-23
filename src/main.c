@@ -4,13 +4,14 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/wait.h>
+// #include <sys/wait.h>
 
 #define BUILTIN 3
 static const char *builtin_commands[] = {
   "echo",
   "exit",
-  "type"
+  "type",
+  "pwd"
 };
 
 char* find_executable(const char *cmd){
@@ -79,6 +80,9 @@ int main(int argc, char *argv[]) {
     }
     else if(strncmp(buffer, "echo ", 5) == 0) {
       printf("%s\n", buffer + 5);
+    }
+    else if(strcmp(buffer, "pwd") == 0) {
+      printf("%s\n", getcwd(NULL, 0));
     }
     else {
       char *args[64];
