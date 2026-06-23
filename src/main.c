@@ -99,6 +99,15 @@ int main(int argc, char *argv[]) {
         }
         continue;
       }
+      if(strcmp(dir, "~") == 0) {
+        char *home = getenv("HOME");
+        if(home != NULL) {
+          if(chdir(home) != 0) {
+            printf("cd: %s: No such file or directory\n", home);
+          }
+          continue;
+        }
+      }
       if(chdir(dir) != 0) {
         printf("cd: %s: No such file or directory\n", dir);
       }
