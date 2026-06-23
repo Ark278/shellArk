@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define BUILTIN 3
 static const char *builtin_commands[] = {
@@ -79,7 +81,43 @@ int main(int argc, char *argv[]) {
       printf("%s\n", buffer + 5);
     }
     else {
-      printf("%s: command not found\n", buffer);
+      char *args[64];
+      int argc = 0;
+
+      char *token = strtok(buffer, " ");
+      while(token != NULL && argc < 63) {
+        args[argc++] = token;
+        token = strtok(NULL, " ");
+      }
+      args[argc] = NULL;
+      if(argc == 0) {
+        continue;
+      }
+
+      char *path = find_executable(args[0]);
+      if(path == NULL) {
+        printf("%s: command not found\n", buffer);
+        continue;
+      }
+      else{
+        pid_t pid = fork();
+        if(pid == 0) {
+          execv(path, args);
+          perror("execv");
+          exit(1);
+        }
+        else if(pid > 0) {
+          int status;
+          waitpid(pid, &status, 0);
+        }
+        else {
+          perror("fork");
+        }
+        free(path);
+      }
+      else{
+        printf("%s: command not found\n", buffer);
+      }
     }
   }
   return 0;
