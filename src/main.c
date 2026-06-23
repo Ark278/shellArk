@@ -4,9 +4,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-// #include <sys/wait.h>
+#include <sys/wait.h>
 
-#define BUILTIN 3
+#define BUILTIN 4
 static const char *builtin_commands[] = {
   "echo",
   "exit",
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
     else if(strncmp(buffer, "echo ", 5) == 0) {
       printf("%s\n", buffer + 5);
     }
-    else if(strncmp(buffer, "pwd ", 4) == 0) {
+    else if(strcmp(buffer, "pwd") == 0) {
       char cwd[1024];
       if(getcwd(cwd, sizeof(cwd)) !=NULL) {
         printf("%s\n", cwd);
