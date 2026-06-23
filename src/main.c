@@ -6,12 +6,13 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#define BUILTIN 4
+#define BUILTIN 5
 static const char *builtin_commands[] = {
   "echo",
   "exit",
   "type",
-  "pwd"
+  "pwd",
+  "cd"
 };
 
 char* find_executable(const char *cmd){
@@ -88,6 +89,12 @@ int main(int argc, char *argv[]) {
       }
       else {
         perror("getcwd");
+      }
+    }
+    else if(strncmp(buffer, "cd ", 3) == 0) {
+      char *dir = buffer + 3;
+      if(chdir(dir) != 0) {
+        perror("cd: %s: No such file or directory", dir);
       }
     }
     else {
