@@ -6,13 +6,14 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#define BUILTIN 5
+#define BUILTIN 6
 static const char *builtin_commands[] = {
   "echo",
   "exit",
   "type",
   "pwd",
-  "cd"
+  "cd",
+  "cat"
 };
 
 char* find_executable(const char *cmd){
@@ -62,6 +63,16 @@ int main(int argc, char *argv[]) {
     if(len > 0 && buffer[len - 1] == '\n'){
       buffer[len-1] = '\0';
     }
+    char *outfile = NULL;
+    char *redirect = strchr(buffer, '>');
+    if(redirect != NULL) {
+      *redirect = '\0';
+      redirect++;
+      while(*redirect == ' ') {
+        redirect++;
+      }
+      outfile = redirect;
+    }
     if(strcmp(buffer, "exit") == 0) {
       break;
     }
@@ -80,7 +91,19 @@ int main(int argc, char *argv[]) {
       }
     }
     else if(strncmp(buffer, "echo ", 5) == 0) {
-      printf("%s\n", buffer + 5);
+      if(outfile != NULL) {
+        FILE *fp = fopen(outfile, "w");
+        if(fp) {
+          fprintf(fp, "%s\n", buffer + 5);
+          fclose(fp);
+        }
+        else {
+          printf("Error opening file %s for writing\n", outfile);
+        }
+      }
+      else {
+        printf("%s\n", buffer + 5);
+      }
     }
     else if(strcmp(buffer, "pwd") == 0) {
       char cwd[1024];
