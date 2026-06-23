@@ -82,7 +82,13 @@ int main(int argc, char *argv[]) {
       printf("%s\n", buffer + 5);
     }
     else if(strcmp(buffer, "pwd") == 0) {
-      printf("%s\n", getcwd(NULL, 0));
+      char cwd[1024];
+      if(getcwd(cwd, sizeof(cwd)) !=NULL) {
+        printf("%s\n", cwd);
+      }
+      else {
+        perror("getcwd");
+      }
     }
     else {
       char *args[64];
