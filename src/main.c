@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
     else if(strncmp(buffer, "echo ", 5) == 0) {
       printf("%s\n", buffer + 5);
     }
-    else if(strcmp(buffer, "pwd") == 0) {
+    else if(strncmp(buffer, "pwd ", 4) == 0) {
       char cwd[1024];
       if(getcwd(cwd, sizeof(cwd)) !=NULL) {
         printf("%s\n", cwd);
